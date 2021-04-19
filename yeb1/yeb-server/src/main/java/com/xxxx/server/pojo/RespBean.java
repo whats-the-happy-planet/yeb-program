@@ -1,13 +1,9 @@
 package com.xxxx.server.pojo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +16,9 @@ public class RespBean {
     private String message;
     @ApiModelProperty(value = "对象")
     private Object obj;
+
+    public RespBean() {
+    }
 
     //封装成功的返回对象
     public static RespBean success(String message){

@@ -2,7 +2,6 @@ package com.xxxx.server.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxxx.server.pojo.Menu;
-import com.xxxx.server.pojo.Role;
 
 import java.util.List;
 
@@ -21,4 +20,7 @@ public interface IMenuService extends IService<Menu> {
 
     //根据当前资源，查询可使用他的角色
     List<Menu> getRoleByMenuId();
+
+    //查询所有菜单
+    List<Menu> getAllMenus();
 }
