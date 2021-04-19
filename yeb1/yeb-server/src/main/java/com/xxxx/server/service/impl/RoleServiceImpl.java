@@ -2,9 +2,11 @@ package com.xxxx.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.xxxx.server.mapper.AdminRoleMapper;
 import com.xxxx.server.mapper.MenuRoleMapper;
 import com.xxxx.server.mapper.RoleMapper;
+import com.xxxx.server.pojo.Joblevel;
 import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IRoleService;
 import com.xxxx.server.utils.AssertUtil;
