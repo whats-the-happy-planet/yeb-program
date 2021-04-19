@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxxx.server.mapper.AdminMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xxxx.server.pojo.Admin">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="phone" property="phone" />
+        <result column="telephone" property="telephone" />
+        <result column="address" property="address" />
+        <result column="enabled" property="enabled" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="userFace" property="userFace" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+    <resultMap id="adminwithrole" type="com.xxxx.server.pojo.Admin" extends="BaseResultMap">
+        <collection property="roles" ofType="com.xxxx.server.pojo.Admin">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+            <result column="rnameZh" property="nameZh"/>
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, name, phone, telephone, address, enabled, username, password, userFace, remark
+    </sql>
+
+
+<!--    //根据用户信息查询对应角色-->
+    <select id="quryRoleByAdmin" parameterType="int" resultMap="adminwithrole">
+        SELECT
+            a.*,
+            r.id as rid,
+            r.name as rname,
+            r.nameZh as rnameZh
+        from
+            t_admin a,
+            t_admin_role ar,
+            t_role r
+        WHERE
+            a.id=ar.adminid
+        and
+            ar.rid = r.id
+        and
+            a.id = #{id}
+    </select>
+
+
+<!--    //根据ID查询角色-->
+    <select id="quryRoles" parameterType="int" resultType="role">
+        select
+			r.*
+        from
+            t_role r,
+            t_admin_role ar
+        WHERE
+            ar.rid = r.id
+        and
+            ar.adminid = #{id}
+    </select>
+
+</mapper>
