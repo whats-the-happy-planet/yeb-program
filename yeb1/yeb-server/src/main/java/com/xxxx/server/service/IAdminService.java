@@ -48,10 +48,13 @@ public interface IAdminService extends IService<Admin> {
     List<Role> quryRoles(Integer id);
 
     /*
-    通过用户查找除了登陆人员之外的操作员
+    通过用户查找操作员
      */
     List<Admin> queryAdminByUserName(String userName);
 
+    Admin getAdminByUserName(String username);
+
+    List<Role> getRolesByAdminId(Integer id);
     //通过操作员id和角色id来更新
     RespBean updateRole(Integer id, Integer[] rids);
 }

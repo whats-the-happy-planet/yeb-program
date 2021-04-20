@@ -12,5 +12,15 @@ import com.xxxx.server.pojo.Role;
  * @since 2021-04-16
  */
 public interface IRoleService extends IService<Role> {
+    /**
+     * 添加角色
+     * @param role
+     */
+    void addRole(Role role);
 
+    /**
+     * 删除角色
+     * @param rid
+     */
+    void deleteRole(Integer rid);
 }

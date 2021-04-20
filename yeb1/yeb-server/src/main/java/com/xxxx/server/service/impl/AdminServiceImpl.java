@@ -2,11 +2,8 @@ package com.xxxx.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xxxx.server.controller.LoginController;
 import com.xxxx.server.mapper.AdminMapper;
-import com.xxxx.server.mapper.AdminRoleMapper;
 import com.xxxx.server.pojo.Admin;
-import com.xxxx.server.pojo.AdminRole;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IAdminService;
@@ -49,8 +46,6 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     private String tokenHead;
     @Resource
     private AdminMapper adminMapper;
-    @Resource
-    private AdminRoleMapper adminRoleMapper;
 
     @Override
     public RespBean login(String username, String password) {
@@ -124,4 +119,14 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         return RespBean.success("更新成功");
     }
 
+
+    @Override
+    public Admin getAdminByUserName(String username) {
+        return adminMapper.selectOne(new QueryWrapper<Admin>().eq("username",username).eq("enabled",true));
+    }
+
+    @Override
+    public List<Role> getRolesByAdminId(Integer adminId) {
+        return roleMapper.getRolesByAdminId(adminId);
+    }
 }

@@ -21,4 +21,14 @@
         </foreach>
     </update>
 
+    <!--根据角色ID查询角色下的所有用户-->
+    <select id="selectByRid" resultType="com.xxxx.server.pojo.AdminRole">
+        select
+         <include refid="Base_Column_List"/>
+        from
+        t_admin_role
+        where
+        rid=#{rid}
+    </select>
+
 </mapper>
