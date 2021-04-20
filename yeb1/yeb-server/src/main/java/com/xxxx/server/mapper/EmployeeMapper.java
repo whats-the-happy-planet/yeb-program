@@ -2,6 +2,9 @@ package com.xxxx.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xxxx.server.pojo.Employee;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,24 @@ import com.xxxx.server.pojo.Employee;
  * @since 2021-04-16
  */
 public interface EmployeeMapper extends BaseMapper<Employee> {
+    /**
+     *查询用户信息
+     * @param name
+     * @return
+     */
+    List<Employee> queryAllByName(String name);
 
+    /**
+     * 修改信息
+     * @param employee
+     * @return
+     */
+    Integer updateEmployee(Employee employee);
+
+    /**
+     * 增加信息
+     * @param employee
+     * @return
+     */
+    Integer insertEmployee(Employee employee);
 }

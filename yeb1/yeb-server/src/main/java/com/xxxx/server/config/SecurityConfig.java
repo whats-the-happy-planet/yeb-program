@@ -1,5 +1,6 @@
 package com.xxxx.server.config;
 
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.xxxx.server.config.compoent.CustomFilter;
 import com.xxxx.server.config.compoent.CustomUrlDecisionManager;
 import com.xxxx.server.config.compoent.JwtAuthencationTokenFilter;
@@ -124,5 +125,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtAuthencationTokenFilter jwtAuthencationTokenFilter(){
         return new JwtAuthencationTokenFilter();
+    }
+
+    @Bean
+    public PaginationInterceptor paginationInterceptor(){
+        return new PaginationInterceptor();
     }
 }

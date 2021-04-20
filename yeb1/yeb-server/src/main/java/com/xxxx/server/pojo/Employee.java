@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -30,7 +31,8 @@ public class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "员工编号")
-    @TableId(value = "id", type = IdType.AUTO)
+//    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(type = IdType.AUTO)
     private Integer id;
 
     @ApiModelProperty(value = "员工姓名")
@@ -117,5 +119,15 @@ public class Employee implements Serializable {
     @ApiModelProperty(value = "工资账套ID")
     private Integer salaryId;
 
+    @ApiModelProperty(value = "民族")
+    private String nation;
 
+    @ApiModelProperty(value = "职位")
+    private  String position;
+
+    @ApiModelProperty(value = "部门")
+    private String department;
+
+    @ApiModelProperty(value = "职称")
+    private String joblevel;
 }

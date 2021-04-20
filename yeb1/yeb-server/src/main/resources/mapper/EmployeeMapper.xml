@@ -40,4 +40,31 @@
         id, name, gender, birthday, idCard, wedlock, nationId, nativePlace, politicId, email, phone, address, departmentId, jobLevelId, posId, engageForm, tiptopDegree, specialty, school, beginDate, workState, workID, contractTerm, conversionTime, notWorkDate, beginContract, endContract, workAge, salaryId
     </sql>
 
+
+    <!-- 查询所有结果 -->
+    <select id="queryAllByName" parameterType="string" resultType="com.xxxx.server.pojo.Employee">
+        SELECT e.*,n.name nation,p.name position,d.name department,j.name joblevel
+        FROM
+        t_employee e,
+        t_nation n,
+        t_position p,
+        t_department d,
+        t_joblevel j
+            <where>
+                e.nationId=n.id
+                and e.posId=p.id
+                and e.departmentId=d.id
+                and e.jobLevelId=j.id
+                <if test="name!=null and name!=''">
+                    and e.name like concat("%",#{name},"%")
+                </if>
+            </where>
+    </select>
+
+
+<!--    Integer insertEmployee(Employee employee);-->
+
+<!--    <insert id="insertEmployee" parameterType="employee">-->
+<!--       insert t_employee()-->
+<!--    </insert>-->
 </mapper>
