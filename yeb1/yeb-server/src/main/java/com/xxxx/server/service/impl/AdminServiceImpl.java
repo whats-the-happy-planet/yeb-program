@@ -1,26 +1,30 @@
 package com.xxxx.server.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxxx.server.mapper.AdminMapper;
+import com.xxxx.server.mapper.AdminRoleMapper;
+import com.xxxx.server.mapper.RoleMapper;
 import com.xxxx.server.pojo.Admin;
+import com.xxxx.server.pojo.AdminRole;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IAdminService;
 import com.xxxx.server.utils.AdminUtils;
 import com.xxxx.server.utils.JwtTokenUtil;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,9 +50,14 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     private String tokenHead;
     @Resource
     private AdminMapper adminMapper;
+    @Resource
+    private RoleMapper roleMapper;
+    @Resource
+    private AdminRoleMapper adminRoleMapper;
+
 
     @Override
-    public RespBean login(String username, String password) {
+    public RespBean login(String username, String password, String code, HttpServletRequest request) {
         //加载登录对象信息
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         if(userDetails == null || !passwordEncoder.matches(password,userDetails.getPassword())){
@@ -104,14 +113,17 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     }
 
     @Override
-    public List<Admin> queryAdminByUserName(String userName) {
-        return adminMapper.queryAdminByUserName(AdminUtils.getCurrentAdmin().getId(),userName);
+    public List<Admin> queryAdminByUserName(String keywords) {
+        return adminMapper.queryAdminByUserName(AdminUtils.getCurrentAdmin().getId(),keywords);
     }
 
     //通过操作员的id和角色id来对某个操作员的角色修改
     @Override
+    @Transactional
     public RespBean updateRole(Integer adminId, Integer[] rids) {
-        adminRoleMapper.delete(new QueryWrapper<AdminRole>().eq("adminId",adminId));
+        QueryWrapper<AdminRole> wrapper = new QueryWrapper<>();
+        wrapper.eq("adminId", adminId);
+        adminRoleMapper.delete(wrapper);
         Integer count = adminRoleMapper.updateRole(adminId, rids);
         if(rids.length != count){
                return RespBean.error("更新失败");

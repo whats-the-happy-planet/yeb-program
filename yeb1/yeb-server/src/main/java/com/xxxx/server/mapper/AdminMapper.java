@@ -25,6 +25,6 @@ public interface AdminMapper extends BaseMapper<Admin> {
     List<Role> quryRoles(Integer id);
 
     //根据输入的用户名查找操作员
-    List<Admin> queryAdminByUserName(@Param("id")Integer id,@Param("userName")String userName);
+    List<Admin> queryAdminByUserName(@Param("id")Integer id,@Param("keywords")String keywords);
 
 }

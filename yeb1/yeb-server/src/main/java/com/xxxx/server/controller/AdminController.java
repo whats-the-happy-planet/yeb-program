@@ -34,14 +34,14 @@ public class AdminController {
     private IRoleService roleService;
 
     @ApiOperation(value = "通过用户名查找操作员")
-    @GetMapping("/keyWords")
-    public List<Admin> queryAdminByUserName(String userName){
-        return adminService.queryAdminByUserName(userName);
+    @GetMapping("/")
+    public List<Admin> queryAdminByUserName(String keywords){
+        return adminService.queryAdminByUserName(keywords);
     }
 
     @ApiOperation(value = "更改操作员信息")
     @PutMapping("/")
-    public RespBean update(Admin admin){
+    public RespBean update(@RequestBody Admin admin){
         if(adminService.updateById(admin)){
             return RespBean.success("更改成功");
         }
@@ -69,10 +69,8 @@ public class AdminController {
     }
 
     @ApiOperation(value = "更新操作员的角色")
-    @GetMapping("/role")
-    public RespBean updateRole(Integer id,Integer[] rids){
-        return adminService.updateRole(id,rids);
+    @PutMapping("/role")
+    public RespBean updateRole(Integer adminId,Integer[] rids){
+        return adminService.updateRole(adminId,rids);
     }
-
-
 }

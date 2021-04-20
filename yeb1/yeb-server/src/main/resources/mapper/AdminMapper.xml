@@ -75,11 +75,9 @@
         where a.id = ar.adminId
         and ar.rid = r.id
         and a.id != #{id}
-        <if test="null != userName and userName !=''">
-            and a.name like concat('%',#{userName},'%');
+        <if test="null != keywords and keywords !=''">
+            and a.name like concat('%',#{keywords},'%');
         </if>
     </select>
-    
-
 
 </mapper>

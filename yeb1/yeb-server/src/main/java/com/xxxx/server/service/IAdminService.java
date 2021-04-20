@@ -6,6 +6,7 @@ import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -24,9 +25,11 @@ public interface IAdminService extends IService<Admin> {
      * 登录
      * @param username
      * @param password
+     * @param code
+     * @param request
      * @return
      */
-    RespBean login(String username, String password);
+    RespBean login(String username, String password, String code, HttpServletRequest request);
 
     /**
      * 通过用户名返回查询对象
@@ -50,11 +53,11 @@ public interface IAdminService extends IService<Admin> {
     /*
     通过用户查找操作员
      */
-    List<Admin> queryAdminByUserName(String userName);
+    List<Admin> queryAdminByUserName(String keywords);
 
     Admin getAdminByUserName(String username);
 
     List<Role> getRolesByAdminId(Integer id);
     //通过操作员id和角色id来更新
-    RespBean updateRole(Integer id, Integer[] rids);
+    RespBean updateRole(Integer adminId, Integer[] rids);
 }
