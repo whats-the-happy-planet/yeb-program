@@ -25,7 +25,7 @@ import java.time.LocalDate;
 @Accessors(chain = true)
 @TableName("t_employee")
 @ApiModel(value="Employee对象", description="")
-public class Employee implements Serializable {
+public class  Employee implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -114,8 +114,13 @@ public class Employee implements Serializable {
     @ApiModelProperty(value = "工龄")
     private Integer workAge;
 
+
     @ApiModelProperty(value = "工资账套ID")
     private Integer salaryId;
+    @ApiModelProperty(value = "工资账套ID")
+    private Salary salary;
+    @ApiModelProperty(value = "工资账套ID")
+    private Department department;
 
 
 }

@@ -16,7 +16,7 @@ public class LoginController {
 
     @Resource
     private IAdminService adminService;
-
+ 
     @ApiOperation(value = "登录接口")
     @PostMapping("/login")
     public RespBean login(LoginParam loginParam){
