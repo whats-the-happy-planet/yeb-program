@@ -71,6 +71,8 @@ public class Admin implements Serializable , UserDetails {
     private List<Role> roles;
 
 
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = roles

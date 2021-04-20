@@ -2,11 +2,15 @@ package com.xxxx.server.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.xxxx.server.controller.LoginController;
 import com.xxxx.server.mapper.AdminMapper;
+import com.xxxx.server.mapper.AdminRoleMapper;
 import com.xxxx.server.pojo.Admin;
+import com.xxxx.server.pojo.AdminRole;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IAdminService;
+import com.xxxx.server.utils.AdminUtils;
 import com.xxxx.server.utils.JwtTokenUtil;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +49,8 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     private String tokenHead;
     @Resource
     private AdminMapper adminMapper;
+    @Resource
+    private AdminRoleMapper adminRoleMapper;
 
     @Override
     public RespBean login(String username, String password) {
@@ -101,4 +107,21 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     public List<Role> quryRoles(Integer id) {
         return adminMapper.quryRoles(id);
     }
+
+    @Override
+    public List<Admin> queryAdminByUserName(String userName) {
+        return adminMapper.queryAdminByUserName(AdminUtils.getCurrentAdmin().getId(),userName);
+    }
+
+    //通过操作员的id和角色id来对某个操作员的角色修改
+    @Override
+    public RespBean updateRole(Integer adminId, Integer[] rids) {
+        adminRoleMapper.delete(new QueryWrapper<AdminRole>().eq("adminId",adminId));
+        Integer count = adminRoleMapper.updateRole(adminId, rids);
+        if(rids.length != count){
+               return RespBean.error("更新失败");
+        }
+        return RespBean.success("更新成功");
+    }
+
 }

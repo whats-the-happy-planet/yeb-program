@@ -17,7 +17,7 @@
     </resultMap>
 
     <resultMap id="adminwithrole" type="com.xxxx.server.pojo.Admin" extends="BaseResultMap">
-        <collection property="roles" ofType="com.xxxx.server.pojo.Admin">
+        <collection property="roles" ofType="com.xxxx.server.pojo.Role">
             <id column="rid" property="id"/>
             <result column="rname" property="name"/>
             <result column="rnameZh" property="nameZh"/>
@@ -62,5 +62,24 @@
         and
             ar.adminid = #{id}
     </select>
+
+<!--   根据输入的用户名查找操作员-->
+<!--    List<Admin> queryAdminByUserName(Integer id,String userName);-->
+    <select id="queryAdminByUserName" resultMap="adminwithrole">
+        select
+        a.*,
+        r.id as rid,
+        r.name as rname,
+        r.nameZh as rnameZh
+        from t_admin a,t_admin_role ar,t_role r
+        where a.id = ar.adminId
+        and ar.rid = r.id
+        and a.id != #{id}
+        <if test="null != userName and userName !=''">
+            and a.name like concat('%',#{userName},'%');
+        </if>
+    </select>
+    
+
 
 </mapper>
