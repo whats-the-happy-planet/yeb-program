@@ -14,4 +14,14 @@
         id, mid, rid
     </sql>
 
+    <!--根据角色ID查询角色下的所有权限-->
+    <select id="selectByRid" resultType="com.xxxx.server.pojo.MenuRole">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        t_menu_role
+        where
+        rid=#{rid}
+    </select>
+
 </mapper>

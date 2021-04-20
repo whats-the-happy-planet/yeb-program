@@ -55,6 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(
                 "/login",
                 "/logout",
+                "/css/**",
+                "/js/**",
+                "index.html",
                 "favicon.ico",
                 "/doc.html",
                 "/webjars/**",
