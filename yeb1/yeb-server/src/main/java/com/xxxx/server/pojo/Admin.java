@@ -4,14 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.xxxx.server.config.CustomAuthorityDeserializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -56,7 +52,7 @@ public class Admin implements Serializable , UserDetails {
     private String address;
 
     @ApiModelProperty(value = "是否启用")
-    @Getter(AccessLevel.NONE)
+    @Getter(value = AccessLevel.NONE) //不需要给该属性设置get方法
     private Boolean enabled;
 
     @ApiModelProperty(value = "用户名")
@@ -76,10 +72,7 @@ public class Admin implements Serializable , UserDetails {
     private List<Role> roles;
 
 
-
-
     @Override
-    @JsonDeserialize(using = CustomAuthorityDeserializer.class)
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = roles
                 .stream()

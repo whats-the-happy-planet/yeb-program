@@ -8,17 +8,21 @@ import com.xxxx.server.mapper.AdminRoleMapper;
 import com.xxxx.server.mapper.RoleMapper;
 import com.xxxx.server.pojo.Admin;
 import com.xxxx.server.pojo.AdminRole;
+import com.xxxx.server.pojo.Menu;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IAdminService;
 import com.xxxx.server.utils.AdminUtils;
+import com.xxxx.server.utils.AssertUtil;
 import com.xxxx.server.utils.JwtTokenUtil;
+import com.xxxx.server.utils.PhoneUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +35,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author shi
@@ -50,22 +54,27 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     private String tokenHead;
     @Resource
     private AdminMapper adminMapper;
+
     @Resource
     private RoleMapper roleMapper;
+
     @Resource
     private AdminRoleMapper adminRoleMapper;
 
-
     @Override
     public RespBean login(String username, String password, String code, HttpServletRequest request) {
+        String captcha = (String) request.getSession().getAttribute("captcha");
+        if (StringUtils.isEmpty(code) || !captcha.equalsIgnoreCase(code)) {
+            return RespBean.error("验证码错误");
+        }
         //加载登录对象信息
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if(userDetails == null || !passwordEncoder.matches(password,userDetails.getPassword())){
+        if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new UsernameNotFoundException("用户名和密码异常");
         }
 
         //判断当前对象是否可用
-        if(!userDetails.isEnabled()){
+        if (!userDetails.isEnabled()) {
             return RespBean.error("用户状态异常");
         }
 
@@ -77,13 +86,14 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         String token = jwtTokenUtil.generateToken(userDetails);
         Map<String, Object> map = new HashMap<>();
         System.out.println(tokenHead);
-        map.put("tokenHead",tokenHead);
-        map.put("token",token);
-        return RespBean.success("登录成功",map);
+        map.put("tokenHead", tokenHead);
+        map.put("token", token);
+        return RespBean.success("登录成功", map);
     }
 
     /**
      * 根据用户名查询对象
+     *
      * @param name
      * @return
      */
@@ -94,6 +104,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     /**
      * 根据用户信息查询对应角色
+     *
      * @return
      */
     @Override
@@ -140,5 +151,51 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public List<Role> getRolesByAdminId(Integer adminId) {
         return roleMapper.getRolesByAdminId(adminId);
+    }
+
+    /**
+     * 更新当前用户信息
+     *
+     * @param admin
+     * @return
+     */
+    @Override
+    public Integer updateAdmin(Admin admin) {
+        AssertUtil.isTrue(admin == null, "数据异常");
+        AssertUtil.isTrue(adminMapper.selectById(admin.getId()) == null, "数据异常");
+
+        Admin dbAdmin = adminMapper.selectOne(new QueryWrapper<Admin>().eq("username", admin.getUsername()));
+        AssertUtil.isTrue(dbAdmin != null && dbAdmin.getId() != admin.getId(), "用户名已存在");
+
+
+        AssertUtil.isTrue(org.apache.commons.lang3.StringUtils.isBlank(admin.getPhone()), "用户联系手机不能为空");
+        AssertUtil.isTrue(!PhoneUtil.isMobile(admin.getPhone()), "用户手机格式输入错误");
+
+        AssertUtil.isTrue(adminMapper.updateById(admin) < 1, "更新失败");
+
+        return adminMapper.updateById(admin);
+    }
+
+    @Override
+    public RespBean updateAdminPassword(String oldPass, String pass, Integer adminId) {
+        Admin admin = adminMapper.selectById(adminId);
+        AssertUtil.isTrue(oldPass == null, "旧密码不能为空");
+        AssertUtil.isTrue(pass == null, "新密码不能为空");
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (encoder.matches(oldPass, admin.getPassword())) {
+            admin.setPassword(encoder.encode(pass));
+            int result = adminMapper.updateById(admin);
+            if (result == 1) {
+                return RespBean.success("更新密码成功");
+            }
+        }
+        return RespBean.error("更新密码失败");
+    }
+
+    @Override
+    public List<Admin> getAllAdmins(String keywords) {
+        Integer id = ((Admin)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        return adminMapper.getAllAdmins(id,keywords);
     }
 }

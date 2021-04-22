@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @AllArgsConstructor
-@ApiModel(value="公共的返回对象", description="")
+@ApiModel(value = "公共的返回对象", description = "")
 public class RespBean {
 
     @ApiModelProperty(value = "状态码")
@@ -25,22 +25,22 @@ public class RespBean {
     }
 
     //封装成功的返回对象
-    public static RespBean success(String message){
-        return new RespBean(200,message,null);
+    public static RespBean success(String message) {
+        return new RespBean(200, message, null);
     }
 
     //封装成功的返回对象
-    public static RespBean success(String message,Object obj){
-        return new RespBean(200,message,obj);
+    public static RespBean success(String message, Object obj) {
+        return new RespBean(200, message, obj);
     }
 
     //封装成功的返回对象
-    public static RespBean error(String message){
-        return new RespBean(500,message,null);
+    public static RespBean error(String message) {
+        return new RespBean(500, message, null);
     }
 
     //封装成功的返回对象
-    public static RespBean error(String message,Object obj){
-        return new RespBean(500,message,obj);
+    public static RespBean error(String message, Object obj) {
+        return new RespBean(500, message, obj);
     }
 }

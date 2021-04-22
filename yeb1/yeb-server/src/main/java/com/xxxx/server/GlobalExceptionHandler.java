@@ -21,6 +21,8 @@ public class GlobalExceptionHandler {
         respBean.setCode(500);
         respBean.setMessage(e.getMessage());
         respBean.setObj(request.getRequestURL());
+        //控制台打印异常信息
+        e.printStackTrace();
 
         return respBean;
     }

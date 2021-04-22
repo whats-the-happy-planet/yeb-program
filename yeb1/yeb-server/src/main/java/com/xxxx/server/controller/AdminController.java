@@ -1,20 +1,23 @@
 package com.xxxx.server.controller;
 
 
-import com.xxxx.server.pojo.Admin;
-import com.xxxx.server.pojo.RespBean;
-import com.xxxx.server.pojo.Role;
-import com.xxxx.server.service.IAdminRoleService;
 import com.xxxx.server.service.IAdminService;
-import com.xxxx.server.service.IRoleService;
-import com.xxxx.server.service.impl.RoleServiceImpl;
-import com.xxxx.server.utils.AdminUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -25,7 +28,7 @@ import java.util.List;
  * @since 2021-04-16
  */
 @RestController
-@RequestMapping("/system/admin")
+@RequestMapping("/admin")
 public class AdminController {
 
     @Resource
