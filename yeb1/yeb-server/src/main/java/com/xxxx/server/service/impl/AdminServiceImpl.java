@@ -3,30 +3,33 @@ package com.xxxx.server.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xxxx.server.mapper.AdminMapper;
+import com.xxxx.server.mapper.AdminRoleMapper;
+import com.xxxx.server.mapper.RoleMapper;
 import com.xxxx.server.pojo.Admin;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IAdminService;
 import com.xxxx.server.utils.JwtTokenUtil;
-import io.swagger.models.auth.In;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author shi
@@ -46,16 +49,26 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Resource
     private AdminMapper adminMapper;
 
+    @Resource
+    private RoleMapper roleMapper;
+
+    @Resource
+    private AdminRoleMapper adminRoleMapper;
+
     @Override
-    public RespBean login(String username, String password) {
+    public RespBean login(String username, String password, String code, HttpServletRequest request) {
+        String captcha = (String) request.getSession().getAttribute("captcha");
+        if (StringUtils.isEmpty(code) || !captcha.equalsIgnoreCase(code)) {
+            return RespBean.error("验证码错误");
+        }
         //加载登录对象信息
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        if(userDetails == null || !passwordEncoder.matches(password,userDetails.getPassword())){
+        if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
             throw new UsernameNotFoundException("用户名和密码异常");
         }
 
         //判断当前对象是否可用
-        if(!userDetails.isEnabled()){
+        if (!userDetails.isEnabled()) {
             return RespBean.error("用户状态异常");
         }
 
@@ -67,13 +80,14 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         String token = jwtTokenUtil.generateToken(userDetails);
         Map<String, Object> map = new HashMap<>();
         System.out.println(tokenHead);
-        map.put("tokenHead",tokenHead);
-        map.put("token",token);
-        return RespBean.success("登录成功",map);
+        map.put("tokenHead", tokenHead);
+        map.put("token", token);
+        return RespBean.success("登录成功", map);
     }
 
     /**
      * 根据用户名查询对象
+     *
      * @param name
      * @return
      */
@@ -84,6 +98,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
 
     /**
      * 根据用户信息查询对应角色
+     *
      * @return
      */
     @Override
@@ -100,5 +115,15 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public List<Role> quryRoles(Integer id) {
         return adminMapper.quryRoles(id);
+    }
+
+    @Override
+    public Admin getAdminByUserName(String username) {
+        return adminMapper.selectOne(new QueryWrapper<Admin>().eq("username",username).eq("enabled",true));
+    }
+
+    @Override
+    public List<Role> getRolesByAdminId(Integer adminId) {
+        return roleMapper.getRolesByAdminId(adminId);
     }
 }

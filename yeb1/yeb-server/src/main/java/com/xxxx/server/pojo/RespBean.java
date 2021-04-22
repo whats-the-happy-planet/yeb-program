@@ -21,6 +21,9 @@ public class RespBean {
     @ApiModelProperty(value = "对象")
     private Object obj;
 
+    public RespBean() {
+    }
+
     //封装成功的返回对象
     public static RespBean success(String message){
         return new RespBean(200,message,null);
