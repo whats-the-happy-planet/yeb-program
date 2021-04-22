@@ -10,6 +10,8 @@ import com.xxxx.server.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
+
 /**
  * <p>
  *  服务实现类
@@ -29,7 +31,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     public RespPageBean getEmployeeWithSalary(Integer currentPage, Integer size) {
         Page<Employee> page = new Page<>(currentPage, size);
         IPage<Employee> employeeIPage = employeeMapper.getEmployeeWithSalary(page);
-        RespPageBean respPageBean = new RespPageBean(employeeIPage.getTotal(),employeeIPage.getRecords());
+        RespPageBean respPageBean = new RespPageBean((long)size,employeeIPage.getRecords());
         return respPageBean;
     }
 }

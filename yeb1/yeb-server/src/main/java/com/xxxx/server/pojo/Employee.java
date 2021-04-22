@@ -119,7 +119,7 @@ public class  Employee implements Serializable {
     private Integer salaryId;
     @ApiModelProperty(value = "工资账套ID")
     private Salary salary;
-    @ApiModelProperty(value = "工资账套ID")
+    @ApiModelProperty(value ="部门")
     private Department department;
 
 
