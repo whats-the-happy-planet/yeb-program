@@ -2,7 +2,6 @@ package com.xxxx.server.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxxx.server.pojo.Admin;
-import com.xxxx.server.pojo.Menu;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import org.springframework.stereotype.Service;
@@ -57,4 +56,20 @@ public interface IAdminService extends IService<Admin> {
     List<Role> getRolesByAdminId(Integer id);
 
     List<Admin> getAllAdmins(String keywords);
+
+    /**
+     * 更新当前用户信息
+     * @param admin
+     * @return
+     */
+    Integer updateAdmin(Admin admin);
+
+    /**
+     * 更新用户密码
+     * @param oldPass
+     * @param pass
+     * @param adminId
+     * @return
+     */
+    RespBean updateAdminPassword(String oldPass, String pass, Integer adminId);
 }

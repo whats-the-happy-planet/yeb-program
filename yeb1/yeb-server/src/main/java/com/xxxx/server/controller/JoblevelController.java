@@ -32,14 +32,14 @@ public class JoblevelController {
 
     @ApiOperation(value = "添加职称")
     @PostMapping("/")
-    public RespBean addJobLevel(Joblevel joblevel) {
+    public RespBean addJobLevel(@RequestBody Joblevel joblevel) {
         joblevelService.addJobLevel(joblevel);
         return RespBean.success("添加职称成功");
     }
 
     @ApiOperation(value = "更新职称")
     @PutMapping("/")
-    public RespBean updateJobLevel(Joblevel joblevel) {
+    public RespBean updateJobLevel(@RequestBody Joblevel joblevel) {
         joblevelService.updateJobLevel(joblevel);
         return RespBean.success("更新职称成功");
     }
