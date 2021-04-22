@@ -2,6 +2,7 @@ package com.xxxx.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xxxx.server.pojo.Admin;
+import com.xxxx.server.pojo.Menu;
 import com.xxxx.server.pojo.Role;
 
 import java.util.List;
@@ -21,4 +22,7 @@ public interface AdminMapper extends BaseMapper<Admin> {
 
     //根据ID查询角色
     List<Role> quryRoles(Integer id);
+
+
+    List<Admin> getAllAdmins(Integer id, String keywords);
 }

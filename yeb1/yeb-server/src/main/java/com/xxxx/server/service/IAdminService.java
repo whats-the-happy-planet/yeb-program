@@ -2,6 +2,7 @@ package com.xxxx.server.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xxxx.server.pojo.Admin;
+import com.xxxx.server.pojo.Menu;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import org.springframework.stereotype.Service;
@@ -54,4 +55,6 @@ public interface IAdminService extends IService<Admin> {
     Admin getAdminByUserName(String username);
 
     List<Role> getRolesByAdminId(Integer id);
+
+    List<Admin> getAllAdmins(String keywords);
 }

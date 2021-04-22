@@ -6,6 +6,7 @@ import com.xxxx.server.mapper.AdminMapper;
 import com.xxxx.server.mapper.AdminRoleMapper;
 import com.xxxx.server.mapper.RoleMapper;
 import com.xxxx.server.pojo.Admin;
+import com.xxxx.server.pojo.Menu;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IAdminService;
@@ -125,5 +126,11 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public List<Role> getRolesByAdminId(Integer adminId) {
         return roleMapper.getRolesByAdminId(adminId);
+    }
+
+    @Override
+    public List<Admin> getAllAdmins(String keywords) {
+        Integer id = ((Admin)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        return adminMapper.getAllAdmins(id,keywords);
     }
 }
