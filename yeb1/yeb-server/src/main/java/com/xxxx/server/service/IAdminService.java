@@ -54,4 +54,20 @@ public interface IAdminService extends IService<Admin> {
     Admin getAdminByUserName(String username);
 
     List<Role> getRolesByAdminId(Integer id);
+
+    /**
+     * 更新当前用户信息
+     * @param admin
+     * @return
+     */
+    Integer updateAdmin(Admin admin);
+
+    /**
+     * 更新用户密码
+     * @param oldPass
+     * @param pass
+     * @param adminId
+     * @return
+     */
+    RespBean updateAdminPassword(String oldPass, String pass, Integer adminId);
 }
