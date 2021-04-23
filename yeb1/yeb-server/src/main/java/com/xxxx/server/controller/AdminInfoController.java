@@ -1,27 +1,18 @@
 package com.xxxx.server.controller;
 
-import com.google.gson.Gson;
-import com.qiniu.http.Response;
-import com.qiniu.storage.model.DefaultPutRet;
-import com.qiniu.storage.model.FileInfo;
 import com.xxxx.server.pojo.Admin;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.service.IAdminService;
-import com.xxxx.server.service.QNService;
 import com.xxxx.server.utils.PictureUtil;
 import com.xxxx.server.utils.QiniuUtils;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
