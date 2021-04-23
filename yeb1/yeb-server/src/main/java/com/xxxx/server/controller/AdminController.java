@@ -1,7 +1,12 @@
 package com.xxxx.server.controller;
 
 
+import com.xxxx.server.pojo.Admin;
+import com.xxxx.server.pojo.RespBean;
+import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IAdminService;
+import com.xxxx.server.service.IRoleService;
+import com.xxxx.server.utils.AdminUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +33,7 @@ import java.util.stream.Collectors;
  * @since 2021-04-16
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("system/admin")
 public class AdminController {
 
     @Resource

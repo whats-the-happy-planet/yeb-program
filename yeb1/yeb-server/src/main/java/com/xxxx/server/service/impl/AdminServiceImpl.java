@@ -12,12 +12,10 @@ import com.xxxx.server.pojo.Menu;
 import com.xxxx.server.pojo.RespBean;
 import com.xxxx.server.pojo.Role;
 import com.xxxx.server.service.IAdminService;
-import com.xxxx.server.utils.AdminUtils;
-import com.xxxx.server.utils.AssertUtil;
-import com.xxxx.server.utils.JwtTokenUtil;
-import com.xxxx.server.utils.PhoneUtil;
+import com.xxxx.server.utils.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -126,6 +125,21 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public List<Admin> queryAdminByUserName(String keywords) {
         return adminMapper.queryAdminByUserName(AdminUtils.getCurrentAdmin().getId(),keywords);
+    }
+
+    @Override
+    public RespBean updateAdminUserFace(String url, Integer id, Authentication authentication) {
+        Admin admin = adminMapper.selectById(id);
+        admin.setUserFace(url);
+        int result = adminMapper.updateById(admin);
+        if(1==result){
+            Admin principal = (Admin) authentication.getPrincipal();
+            principal.setUserFace(url);
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(admin,null,authentication.getAuthorities()));
+            return RespBean.success("更新成功",url);
+        }
+
+        return RespBean.error("更新失败");
     }
 
     //通过操作员的id和角色id来对某个操作员的角色修改
