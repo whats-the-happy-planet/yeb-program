@@ -5,7 +5,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>yeb-server</module>
-        <module>yeb-generator</module>
+        <module>yeb-mail</module>
+        <module>yeb-email</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -22,7 +23,10 @@
         <java.version>1.8</java.version>
     </properties>
     <dependencies>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

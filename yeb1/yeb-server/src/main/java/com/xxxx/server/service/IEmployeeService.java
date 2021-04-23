@@ -1,9 +1,9 @@
 package com.xxxx.server.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xxxx.server.pojo.Employee;
-import org.apache.ibatis.annotations.Param;
+import com.xxxx.server.pojo.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -16,12 +16,27 @@ import java.util.List;
  */
 public interface IEmployeeService extends IService<Employee> {
 
-    List<Employee> queryAllByName(String name,Integer currentPage);
+    ResultObject queryAllByName(String name,Integer currentPage);
 
-    Integer updateEmployee(Employee employee);
+    RespBean updateEmployee(Employee employee);
 
-    Integer insertEmployee(Employee employee);
+    RespBean insertEmployee(Employee employee);
 
-    void deleteEmployee(Employee employee);
+    RespBean deleteEmployee(Integer id);
 
+    List<Nation> queryAllNation();
+
+    List<Joblevel> queryAllJoblevel();
+
+    List<Position> queryAllPosition();
+
+    List<PoliticsStatus> queryAllPolit();
+
+    RespBean maxWorkID();
+
+    List<Department> queryDeps();
+
+    ResultObject qyeryAll(Integer currentPage, Integer size, Employee employee, LocalDate[] beginDataScope);
+
+    List<Employee> getEmployee(Integer id);
 }

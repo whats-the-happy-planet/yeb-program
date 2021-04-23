@@ -34,37 +34,121 @@
         <result column="workAge" property="workAge" />
         <result column="salaryId" property="salaryId" />
     </resultMap>
-
+    <resultMap id="EmployeeInfo" type="com.xxxx.server.pojo.Employee" extends="BaseResultMap">
+        <association property="nation" javaType="com.xxxx.server.pojo.Nation">
+            <id column="nid" property="id"></id>
+            <result column="nname" property="name"></result>
+        </association>
+        <association property="position" javaType="com.xxxx.server.pojo.Position">
+            <id column="pid" property="id"></id>
+            <result column="pname" property="name"></result>
+        </association>
+        <association property="department" javaType="com.xxxx.server.pojo.Department">
+            <id column="did" property="id"></id>
+            <result column="dname" property="name"></result>
+        </association>
+        <association property="joblevel" javaType="com.xxxx.server.pojo.Joblevel">
+            <id column="jid" property="id"></id>
+            <result column="jname" property="name"></result>
+        </association>
+        <association property="politicsStatus" javaType="com.xxxx.server.pojo.PoliticsStatus">
+            <id column="poid" property="id"></id>
+            <result column="poname" property="name"></result>
+        </association>
+    </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, name, gender, birthday, idCard, wedlock, nationId, nativePlace, politicId, email, phone, address, departmentId, jobLevelId, posId, engageForm, tiptopDegree, specialty, school, beginDate, workState, workID, contractTerm, conversionTime, notWorkDate, beginContract, endContract, workAge, salaryId
     </sql>
 
 
+
     <!-- 查询所有结果 -->
-    <select id="queryAllByName" parameterType="string" resultType="com.xxxx.server.pojo.Employee">
-        SELECT e.*,n.name nation,p.name position,d.name department,j.name joblevel
+    <select id="qyeryAll" resultMap="EmployeeInfo">
+        SELECT e.*,
+        n.id nid,
+        n.name nname,
+        p.id pid,
+        p.name pname,
+        d.id did,
+        d.name dname,
+        j.id jid,
+        j.name jname,
+        po.id poid,
+        po.name poname
         FROM
         t_employee e,
         t_nation n,
         t_position p,
         t_department d,
-        t_joblevel j
+        t_joblevel j,
+        t_politics_status po
             <where>
                 e.nationId=n.id
                 and e.posId=p.id
                 and e.departmentId=d.id
                 and e.jobLevelId=j.id
-                <if test="name!=null and name!=''">
-                    and e.name like concat("%",#{name},"%")
+                and e.politicId=po.id
+                <if test="employee.name!=null and employee.name!=''">
+                    and e.name like concat("%",#{employee.name},"%")
+                </if>
+                <if test="employee.politicId!=null">
+                    and e.politicId=#{employee.politicId}
+                </if>
+                <if test="employee.nationId!=null">
+                    and e.nationId=#{employee.nationId}
+                </if>
+                <if test="employee.jobLevelId!=null">
+                    and e.jobLevelId=#{employee.jobLevelId}
+                </if>
+                <if test="employee.posId!=null">
+                    and e.posId=#{employee.posId}
+                </if>
+                <if test="employee.posId!=null">
+                    and e.posId=#{employee.posId}
+                </if>
+                <if test="employee.engageForm!=null and employee.engageForm!=''">
+                    and e.engageForm=#{employee.engageForm}
+                </if>
+                <if test="employee.departmentId!=null">
+                    and e.departmentId=#{employee.departmentId}
+                </if>
+                <if test="beginDataScope!=null and beginDataScope.length != 2">
+                    and e.beginDate BETWEEN #{beginDataScope[0]} AND #{beginDataScope[1]}
                 </if>
             </where>
+         ORDER BY e.id
     </select>
 
 
-<!--    Integer insertEmployee(Employee employee);-->
-
-<!--    <insert id="insertEmployee" parameterType="employee">-->
-<!--       insert t_employee()-->
-<!--    </insert>-->
+    <select id="getEmployee" resultMap="EmployeeInfo">
+        SELECT e.*,
+        n.id nid,
+        n.name nname,
+        p.id pid,
+        p.name pname,
+        d.id did,
+        d.name dname,
+        j.id jid,
+        j.name jname,
+        po.id poid,
+        po.name poname
+        FROM
+        t_employee e,
+        t_nation n,
+        t_position p,
+        t_department d,
+        t_joblevel j,
+        t_politics_status po
+        where
+         e.nationId=n.id
+        and e.posId=p.id
+        and e.departmentId=d.id
+        and e.jobLevelId=j.id
+        and e.politicId=po.id
+        <if test="id != null">
+            and e.id= #{id}
+        </if>
+        ORDER BY e.id
+    </select>
 </mapper>
