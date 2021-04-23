@@ -39,4 +39,6 @@ public interface IEmployeeService extends IService<Employee> {
     ResultObject qyeryAll(Integer currentPage, Integer size, Employee employee, LocalDate[] beginDataScope);
 
     List<Employee> getEmployee(Integer id);
+
+    RespPageBean getEmployeeWithSalary(Integer currentPage, Integer size);
 }

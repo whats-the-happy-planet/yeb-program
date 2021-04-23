@@ -183,4 +183,7 @@ public class Employee implements Serializable {
     @TableField(exist = false)
     @ExcelEntity(name = "政治面貌")
     private PoliticsStatus politicsStatus;
+    @ApiModelProperty(value = "工资账套ID")
+    private Salary salary;
+
 }
