@@ -17,12 +17,13 @@
     </resultMap>
 
     <resultMap id="adminwithrole" type="com.xxxx.server.pojo.Admin" extends="BaseResultMap">
-        <collection property="roles" ofType="com.xxxx.server.pojo.Admin">
+        <collection property="roles" ofType="com.xxxx.server.pojo.Role">
             <id column="rid" property="id"/>
             <result column="rname" property="name"/>
             <result column="rnameZh" property="nameZh"/>
         </collection>
     </resultMap>
+
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
@@ -61,6 +62,50 @@
             ar.rid = r.id
         and
             ar.adminid = #{id}
+    </select>
+    <!--获取所有操作员-->
+    <select id="getAllAdmins" resultMap="adminwithrole">
+        select
+        a.id,
+        a.enabled,
+        a.name,
+        a.address,
+        a.phone,
+        a.remark,
+        a.telephone,
+        a.userFace,
+        a.username,
+        r.id as rid,
+        r.name as rname,
+        r.nameZh as rnameZh
+        from
+        t_admin as a
+        LEFT JOIN t_admin_role as ar on a.id = ar.adminId
+        LEFT JOIN t_role as r on ar.rid = r.id
+        where a.id != #{id}
+        <if test="null != keywords and '' != keywords">
+            and a.name like concat('%',#{keywords},'%')
+        </if>
+        order by
+        a.id
+    </select>
+
+
+<!--   根据输入的用户名查找操作员-->
+<!--    List<Admin> queryAdminByUserName(Integer id,String userName);-->
+    <select id="queryAdminByUserName" resultMap="adminwithrole">
+        select
+        a.*,
+        r.id as rid,
+        r.name as rname,
+        r.nameZh as rnameZh
+        from t_admin a,t_admin_role ar,t_role r
+        where a.id = ar.adminId
+        and ar.rid = r.id
+        and a.id != #{id}
+        <if test="null != keywords and keywords !=''">
+            and a.name like concat('%',#{keywords},'%');
+        </if>
     </select>
 
 </mapper>

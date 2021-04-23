@@ -59,3 +59,9 @@ jwt:
   expiration: 604800
   # JWT 负载中拿到开头
   tokenHead: Bearer
+
+qiniu:
+  accessKey: cdq-yHbD6NmXNeNTrL5HAfwO2Qwa-U5iZ1Rb9XTo
+  secretKey: Bfc430GZB1EQis9qzPjE3UlL95YGpC596dKUhzuA
+  bucket: happywindman
+  path: http://qryffdckj.hn-bkt.clouddn.com

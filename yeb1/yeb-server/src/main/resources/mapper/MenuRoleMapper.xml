@@ -24,4 +24,12 @@
         rid=#{rid}
     </select>
 
+    <!--根据角色ID批量添加菜单-->
+    <insert id="insertMenusRole">
+        insert into t_menu_role(mid,rid) values
+        <foreach collection="mids" item="mid" separator=",">
+            (#{mid},#{rid})
+        </foreach>
+    </insert>
+
 </mapper>

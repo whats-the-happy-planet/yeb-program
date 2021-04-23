@@ -17,6 +17,7 @@ import java.util.List;
  * @author shi
  * @since 2021-04-16
  */
+
 public interface EmployeeMapper extends BaseMapper<Employee> {
     /**
      *查询用户信息
@@ -46,4 +47,5 @@ public interface EmployeeMapper extends BaseMapper<Employee> {
 
     List<Employee> getEmployee(Integer id);
 
+    IPage<Employee> getEmployeeWithSalary(Page<Employee> page);
 }

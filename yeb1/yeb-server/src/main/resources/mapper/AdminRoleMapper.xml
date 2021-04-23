@@ -14,6 +14,13 @@
         id, adminId, rid
     </sql>
 
+    <update id="updateRole">
+        insert into t_admin_role(adminId,rid) values
+        <foreach collection="rids" item="rid" separator=",">
+            (#{adminId},#{rid})
+        </foreach>
+    </update>
+
     <!--根据角色ID查询角色下的所有用户-->
     <select id="selectByRid" resultType="com.xxxx.server.pojo.AdminRole">
         select

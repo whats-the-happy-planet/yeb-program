@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/system/basic/permission")
+@RequestMapping("/system/basic/permiss")
 public class PermissionController {
     @Resource
     private IRoleService roleService;
@@ -32,33 +32,39 @@ public class PermissionController {
     }
 
     @ApiOperation(value = "添加角色")
-    @PostMapping("/")
-    public RespBean addRole(Role role) {
+    @PostMapping("/role")
+    public RespBean addRole(@RequestBody Role role) {
         roleService.addRole(role);
         return RespBean.success("添加角色成功");
     }
 
     @ApiOperation(value = "删除角色")
     @DeleteMapping("/role/{rid}")
-    public RespBean deleteRole(Integer rid){
+    public RespBean deleteRole(Integer rid) {
         roleService.deleteRole(rid);
         return RespBean.success("删除角色成功");
     }
 
     @ApiOperation(value = "查询所有菜单包含子菜单")
     @GetMapping("/menus")
-    public List<Menu> getAllMenus(){
+    public List<Menu> getAllMenus() {
         return menuService.getAllMenus();
     }
 
     @ApiOperation(value = "根据角色ID查询菜单ID")
     @GetMapping("/mid/{rid}")
-    public List<Integer> getMidByRid(@PathVariable Integer rid){
+    public List<Integer> getMidByRid(@PathVariable Integer rid) {
         //QueryWrapper<MenuRole> wrapper = new QueryWrapper<>();
         //wrapper.eq("rid",rid);
         //List<MenuRole> menuRoleList = menuRoleService.list(wrapper);
 
-        return menuRoleService.list(new QueryWrapper<MenuRole>().eq("rid",rid))
-                                .stream().map(MenuRole::getMid).collect(Collectors.toList());
+        return menuRoleService.list(new QueryWrapper<MenuRole>().eq("rid", rid))
+                .stream().map(MenuRole::getMid).collect(Collectors.toList());
+    }
+
+    @ApiOperation(value = "更新角色菜单")
+    @PutMapping("/")
+    public RespBean updateMenuRole(Integer rid, Integer[] mids) {
+        return menuRoleService.updateMenuRole(rid, mids);
     }
 }

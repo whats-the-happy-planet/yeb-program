@@ -14,4 +14,5 @@ public class LoginParam {
     private String userName;
     @ApiModelProperty(value = "密码",required = true)
     private String password;
+
 }
