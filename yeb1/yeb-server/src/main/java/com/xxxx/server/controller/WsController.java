@@ -21,12 +21,7 @@ public class WsController {
         chatMsg.setFrom(admin.getUsername());
         chatMsg.setFromNickName(admin.getName());
         chatMsg.setDate(LocalDateTime.now());
-        /**
-         * 发送消息
-         * 1.消息接收者
-         * 2.消息队列
-         * 3.消息对象
-         */
+
         simpMessagingTemplate.convertAndSendToUser(chatMsg.getTo(),"/queue/chat",chatMsg);
     }
 }
