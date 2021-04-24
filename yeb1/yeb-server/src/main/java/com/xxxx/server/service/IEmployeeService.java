@@ -16,8 +16,6 @@ import java.util.List;
  */
 public interface IEmployeeService extends IService<Employee> {
 
-    ResultObject queryAllByName(String name,Integer currentPage);
-
     RespBean updateEmployee(Employee employee);
 
     RespBean insertEmployee(Employee employee);

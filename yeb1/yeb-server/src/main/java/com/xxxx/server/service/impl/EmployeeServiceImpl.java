@@ -58,8 +58,7 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
 
     @Resource
     private MailLogMapper mailLogMapper;
-//    @Resource
-//    private  EmployeeMapper employeeMapper;
+
 
     @Override
     public RespPageBean getEmployeeWithSalary(Integer currentPage, Integer size) {
@@ -69,28 +68,14 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return respPageBean;
     }
 
-
-    //    @Override
-//    public ResultObject queryAllByName(String name, Integer currentPage) {
-//        ResultObject resultObject=new ResultObject();
-//        List<Employee> employees = employeeMapper.queryAllByName(name);
-//        resultObject.setData(employees);
-//        return resultObject;
-//
-////        if(currentPage==null){
-////            currentPage=1;
-////        }
-////        Page<Employee> page = new Page<>(currentPage,10);
-////        if(name!=null &&name!=""){
-//////            QueryWrapper<Employee> query = new QueryWrapper<>();
-//////            query.like("name",name);
-//////            //return (List<Employee>) employeeMapper.selectPage(page,query);
-//////            return employeeMapper.selectList(query);
-////            return employeeMapper.queryAllByName(name);
-////        }
-////        //return (List<Employee>) employeeMapper.selectPage(page,null);
-////        return employeeMapper.selectList(null);
-//    }
+    /**
+     * 查询全部
+     * @param currentPage
+     * @param size
+     * @param employee
+     * @param beginDataScope
+     * @return
+     */
     @Override
     public ResultObject qyeryAll(Integer currentPage, Integer size, Employee employee, LocalDate[] beginDataScope) {
         Page<Employee> page = new Page<>(currentPage, size);
@@ -99,16 +84,22 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return resultObject;
     }
 
+    /**
+     * 通过ID查询所有Employee
+     * @param id
+     * @return
+     */
     @Override
     public List<Employee> getEmployee(Integer id) {
         return employeeMapper.getEmployee(id);
     }
 
-    @Override
-    public ResultObject queryAllByName(String name, Integer currentPage) {
-        return null;
-    }
 
+    /**
+     * 修改Employee
+     * @param employee
+     * @return
+     */
     @Override
     public RespBean updateEmployee(Employee employee) {
         if(checkCardId(employee.getIdCard())){
@@ -123,6 +114,11 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return RespBean.error("修改失败");
     }
 
+    /**
+     * 添加Employee
+     * @param employee
+     * @return
+     */
     @Override
     public RespBean insertEmployee(Employee employee) {
         if(checkCardId(employee.getIdCard())){
@@ -131,12 +127,6 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         if (!checkPhone(employee.getPhone())){
             return RespBean.error("手机格式不正确");
         }
-
-//        LocalDate beginContract = employee.getBeginContract();
-//        LocalDate endContract = employee.getEndContract();
-//        long until = beginContract.until(endContract, ChronoUnit.DAYS);
-//        DecimalFormat decimalFormat = new DecimalFormat("##.00");
-//        employee.setContractTerm(Double.parseDouble(decimalFormat.format(until / 3)));
         if (employeeMapper.insert(employee) == 1) {
 
             Employee emp = employeeMapper.getEmployee(employee.getId()).get(0);
@@ -159,6 +149,11 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     }
 
 
+    /**
+     * 校验身份证
+     * @param idCard
+     * @return
+     */
     private boolean checkCardId(String idCard) {
         if (IDCardUtil.IDCardValidate(idCard) == "YES") {
             return false;
@@ -166,10 +161,20 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return true;
     }
 
+    /**
+     * 校验手机号
+     * @param phone
+     * @return
+     */
     private boolean checkPhone(String phone) {
         return isChinaPhoneLegal(phone) || isHKPhoneLegal(phone);
     }
 
+    /**
+     * 通过Id删除Employee内容
+     * @param id
+     * @return
+     */
     @Override
     public RespBean deleteEmployee(Integer id) {
         if (employeeMapper.deleteById(id) == 1) {
@@ -178,32 +183,56 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         return RespBean.success("删除失败");
     }
 
+    /**
+     * 查询所有民族
+     * @return
+     */
     @Override
     public List<Nation> queryAllNation() {
         return nationMapper.selectList(null);
     }
 
+    /**
+     * 查询所有职称
+     * @return
+     */
     @Override
     public List<Joblevel> queryAllJoblevel() {
         return joblevelMapper.selectList(null);
     }
 
+    /**
+     * 查询所有职位
+     * @return
+     */
     @Override
     public List<Position> queryAllPosition() {
         return positionMapper.selectList(null);
     }
 
+    /**
+     * 查询所有政治面貌
+     * @return
+     */
     @Override
     public List<PoliticsStatus> queryAllPolit() {
         return politicsStatusMapper.selectList(null);
     }
 
+    /**
+     * 查询最大工作ID
+     * @return
+     */
     @Override
     public RespBean maxWorkID() {
         List<Map<String, Object>> maps = employeeMapper.selectMaps(new QueryWrapper<Employee>().select("max(workID)"));
         return RespBean.success(null, String.format("%08d", Integer.parseInt(maps.get(0).get("max(workID)").toString()) + 1));
     }
 
+    /**
+     * 查询所有部门
+     * @return
+     */
     @Override
     public List<Department> queryDeps() {
         return departmentMapper.selectList(null);

@@ -53,7 +53,7 @@ public class EmployeeController {
     private DepartmentServiceImpl departmentService;
 
     @GetMapping("/basic")
-    @ApiOperation(value = "用户名模糊查询")
+    @ApiOperation(value = "用户名查询")
     public ResultObject queryAllByName(@RequestParam(defaultValue = "1")Integer currentPage, @RequestParam(defaultValue = "10")Integer size, Employee employee, LocalDate[] beginDataScope){
         //return employeeService.queryAllByName(name,currentPage);
         return employeeService.qyeryAll(currentPage,size,employee,beginDataScope);
